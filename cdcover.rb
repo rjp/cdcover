@@ -3,9 +3,12 @@ require 'rmagick'
 
 # graph parameters
 size = 300
-width = 280
-midpoint = 200
-scale = 65536 / 90
+
+offset = 0.05*size
+width = 0.9*size
+height = 0.7*size
+scale = 65536 / (height/2)
+midpoint = size - 1.1*height
 
 canvas = Magick::Image.new(size, size) { self.background_color = 'white' }
 gc = Magick::Draw.new
@@ -44,8 +47,8 @@ x = IO.read(file)
 bytes = x.unpack("i*")
 bucket_size = bytes.size / width
 p bytes.size
-test = bytes[0..441000]
-bytes = test
+#test = bytes[0..441000]
+#bytes = test
 puts "#{bucket_size} samples in each bucket"
 bytes.each_with_index { |i,j|
     left = i >> 16
