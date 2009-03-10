@@ -1,6 +1,7 @@
 # graph parameters
-width = 300
+width = 280
 midpoint = 200
+scale = 65536 / 90
 
 max_vol = 65535
 
@@ -28,18 +29,24 @@ class Bucket
     end
 end
 
-buckets = Array(300)
+buckets = Array.new(300) { Bucket.new }
 
 # read a 16 bit linear raw PCM file
 file = ARGV[0]
 x = IO.read(file)
 bytes = x.unpack("i*")
-test = bytes[-100..-1]
-p bytes.size
 bucket_size = bytes.size / width
+p bytes.size
+test = bytes[0..441000]
+bytes = test
 puts "#{bucket_size} samples in each bucket"
-test.each_with_index { |i,j|
+bytes.each_with_index { |i,j|
     left = i >> 16
     right = i & 0xFFFF
-    puts "#{j} #{left} #{right}"
+    bucket = j / bucket_size
+    if j % 44100 == 0 then puts "#{j/44100} b=#{bucket}"; end
+    buckets[bucket].add(left)
+}
+buckets.each_with_index { |b, i|
+    puts "#{i} #{b.min/scale} #{b.max/scale}"
 }
