@@ -6,14 +6,25 @@ max_vol = 65535
 
 
 class Bucket
-    attr_accessor :total, :count
+    attr_accessor :total, :count, :min, :max
     def initialize
         @total = 0
         @count = 0
+        @min = 0
+        @max = 0
     end
     def add(x)
         @total = @total + x
         @count = @count + 1
+        if x > @max then @max = x; end
+        if x < @min then @min = x; end
+    end
+    def avg
+        if @count > 0 then
+           @total / @count
+        else
+            0
+        end
     end
 end
 
