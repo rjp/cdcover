@@ -1,7 +1,14 @@
+require 'rubygems'
+require 'rmagick'
+
 # graph parameters
+size = 300
 width = 280
 midpoint = 200
 scale = 65536 / 90
+
+canvas = Magick::Image.new(size, size) { self.background_color = 'white' }
+gc = Magick::Draw.new
 
 max_vol = 65535
 
@@ -49,4 +56,10 @@ bytes.each_with_index { |i,j|
 }
 buckets.each_with_index { |b, i|
     puts "#{i} #{b.min/scale} #{b.max/scale}"
+    gc.stroke('#000000')
+    if b.count > 0 then
+        gc.line(i, midpoint+b.min/scale, i, midpoint+b.max/scale)
+    end
 }
+gc.draw(canvas)
+canvas.write("png/test.png")
