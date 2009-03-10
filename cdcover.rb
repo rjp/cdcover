@@ -1,3 +1,10 @@
+# graph parameters
+width = 300
+midpoint = 200
+
+max_vol = 65535
+
+# read a 16 bit linear raw PCM file
 file = ARGV[0]
 x = IO.read(file)
 bytes = x.unpack("i*")
