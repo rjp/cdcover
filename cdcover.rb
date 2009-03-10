@@ -4,6 +4,21 @@ midpoint = 200
 
 max_vol = 65535
 
+
+class Bucket
+    attr_accessor :total, :count
+    def initialize
+        @total = 0
+        @count = 0
+    end
+    def add(x)
+        @total = @total + x
+        @count = @count + 1
+    end
+end
+
+buckets = Array(300)
+
 # read a 16 bit linear raw PCM file
 file = ARGV[0]
 x = IO.read(file)
