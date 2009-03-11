@@ -50,8 +50,11 @@ buckets = Array.new(300) { Bucket.new }
 
 # read a 16 bit linear raw PCM file
 file = ARGV[0]
+puts "reading file ", Time.now
 x = IO.read(file)
+puts "unpacking file ", Time.now
 bytes = x.unpack("i*")
+puts "bucketing samples, ", Time.now
 bucket_size = bytes.size / width
 p bytes.size
 #test = bytes[0..441000]
@@ -61,20 +64,22 @@ bytes.each_with_index { |i,j|
     left = i >> 16
     right = i & 0xFFFF
     bucket = j / bucket_size
-    if j % 44100 == 0 then puts "#{j/44100} b=#{bucket}"; end
+#    if j % 44100 == 0 then puts "#{j/44100} b=#{bucket}"; end
     buckets[bucket].add(left)
 }
+puts "plotting graph ", Time.now
 buckets.each_with_index { |b, i|
     # 261 -43.1272888183594 44.6958160400391 0.0112152099609375 / -26918 7 27897 70724 529807
     gc.stroke('#000000')
     if b.count > 0 then
         avg_p, avg_n = b.avg
         # 5 -6.80763244628906 8.06854248046875 -0.825119018554687 0.821914672851562 / -4249 -515 513 5036 70724 -88632
-        puts "#{i} #{b.min/scale} #{b.max/scale} #{avg_n/scale} #{avg_p/scale} / #{b.min} #{avg_n} #{avg_p} #{b.max} #{b.count} #{b.total}"
-        low = b.min # (avg_n + b.min) / 2
-        high = b.max # (avg_p + b.max) / 2
+#        puts "#{i} #{b.min/scale} #{b.max/scale} #{avg_n/scale} #{avg_p/scale} / #{b.min} #{avg_n} #{avg_p} #{b.max} #{b.count} #{b.total}"
+        low = (avg_n + b.min) / 2
+        high = (avg_p + b.max) / 2
         gc.line(i+offset, midpoint+low/scale, i+offset, midpoint+high/scale)
     end
 }
 gc.draw(canvas)
 canvas.write("png/test.png")
+puts Time.now
