@@ -6,8 +6,8 @@ size = 300
 
 offset = 0.05*size
 width = 0.9*size
-height = 0.7*size
-scale = 65536 / (height/2)
+height = 0.4*size
+scale = 65536 / height
 midpoint = size - 1.1*height
 
 canvas = Magick::Image.new(size, size) { self.background_color = 'white' }
@@ -15,6 +15,9 @@ gc = Magick::Draw.new
 
 max_vol = 65535
 
+file = ARGV[0]
+tracknum = ARGV[1]
+trackname = ARGV[2]
 
 class Bucket
     attr_accessor :total, :count, :min, :max
@@ -49,7 +52,6 @@ end
 buckets = Array.new(300) { Bucket.new }
 
 # read a 16 bit linear raw PCM file
-file = ARGV[0]
 puts "reading file ", Time.now
 x = IO.read(file)
 puts "unpacking file ", Time.now
@@ -69,7 +71,6 @@ bytes.each_with_index { |i,j|
 }
 puts "plotting graph ", Time.now
 buckets.each_with_index { |b, i|
-    # 261 -43.1272888183594 44.6958160400391 0.0112152099609375 / -26918 7 27897 70724 529807
     gc.stroke('#000000')
     if b.count > 0 then
         avg_p, avg_n = b.avg
@@ -80,6 +81,12 @@ buckets.each_with_index { |b, i|
         gc.line(i+offset, midpoint+low/scale, i+offset, midpoint+high/scale)
     end
 }
+# now plot some suitably sized text
+gc.pointsize = 14
+gc.stroke('#888888')
+gc.fill('#888888')
+gc.text(0.1*size, midpoint + 0.6*height, tracknum)
+gc.text(0.1*size, midpoint + 0.7*height, trackname)
 gc.draw(canvas)
 canvas.write("png/test.png")
 puts Time.now
