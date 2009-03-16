@@ -8,7 +8,7 @@ offset = 0.05*size
 width = (0.9*size+0.5).to_i
 height = 0.25*size
 scale = 32768 / height
-midpoint = 1.2*height
+midpoint = 1.4*height
 
 puts "size=#{size} offset=#{offset} width=#{width} height=#{height} scale=#{scale} midpoint=#{midpoint}"
 
@@ -101,8 +101,12 @@ buckets.each_with_index { |b, i|
 gc.pointsize = 36
 gc.stroke('#888888')
 gc.fill('#888888')
-gc.text(0.1*size, midpoint + 1.5*height, tracknum)
-gc.text(0.1*size, midpoint + 1.8*height, trackname)
+
+metrics = gc.get_type_metrics(canvas, trackname)
+puts "width of [#{trackname}] is #{metrics.width}"
+
+gc.text(offset, midpoint + 1.5*height, tracknum)
+gc.text(offset, midpoint + 1.5*height + 1.1*metrics.height, trackname)
 gc.draw(canvas)
 canvas.write("png/test.png")
 puts Time.now
