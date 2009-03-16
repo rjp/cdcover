@@ -106,21 +106,32 @@ metrics = gc.get_type_metrics(canvas, trackname)
 puts "width of [#{trackname}] is #{metrics.width}"
 single_height = metrics.height
 
-if metrics.width > width then # we have to break the text somewhere
+def linebreak(t, gc, canvas, width, depth=0)
+    puts "= #{t}"
+    trackname = t
     extra = ""
     loop do
-	    left, mid, right = trackname.rpartition(/\W/)
+	    left, mid, right = trackname.rpartition(/[^[:alpha:].,]/)
 	    metrics = gc.get_type_metrics(canvas, left)
-        puts "[#{trackname}] => [#{left}] [#{mid}] [#{right}] = #{metrics.width} / [#{extra}]"
 	    if metrics.width < width then
-	        trackname = left << "\n" << right << extra
+	        trackname = left + "\n" + right + extra
 	        metrics = gc.get_multiline_type_metrics(canvas, trackname)
+            if metrics.width > width then
+                bits = linebreak(right + extra, gc, canvas, width, depth+1)
+                trackname = left + "\n" + bits
+	            metrics = gc.get_multiline_type_metrics(canvas, trackname)
+            end
 	        break
 	    else
-            extra = mid << right << extra
+            extra = mid + right + extra
             trackname = left
         end
     end
+    return trackname
+end
+
+if metrics.width > width then # we have to break the text somewhere
+    trackname = linebreak(trackname, gc, canvas, width)
 end
 
 gc.text(offset, midpoint + 1.5*height, tracknum)
