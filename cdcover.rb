@@ -59,20 +59,20 @@ x = IO.read(file)
 puts "unpacking file ", Time.now
 
 # raw 16 bit linear PCM two channel
-bytes = x.unpack("i*")
+bytes = x.unpack("s*")
 
 puts "bucketing samples, ", Time.now
-bucket_size = bytes.size / width
+bucket_size = (((bytes.size-1).to_f / width)+0.5).to_i
 p bytes.size
 #test = bytes[0..441000]
 #bytes = test
-puts "#{bucket_size} samples in each bucket"
+puts "#{bucket_size} samples in each of #{width} buckets"
 bytes.each_with_index { |i,j|
-    left = i >> 16
-    right = i & 0xFFFF
+#    left = i >> 16
+#    right = i & 0xFFFF
+    right = i
     bucket = j / bucket_size
-#    if j % 44100 == 0 then puts "#{j/44100} b=#{bucket}"; end
-    buckets[bucket].add(left)
+    buckets[bucket].add(right)
 }
 p buckets[0..8]
 puts "plotting graph ", Time.now
