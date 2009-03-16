@@ -55,10 +55,18 @@ buckets = Array.new(width) { Bucket.new }
 
 # read a 16 bit linear raw PCM file
 puts "reading file ", Time.now
-x = IO.read(file)
-puts "unpacking file ", Time.now
 
-# raw 16 bit linear PCM two channel
+x=nil
+# we have to fork/exec to get a clean commandline
+IO.popen('-') { |p|
+    if p.nil? then
+        # raw 16 bit linear PCM one channel
+        exec 'sox', file, '-t', 'raw', '-r', '4000', '-c', '1', '-s', '-'
+    end
+    x = p.read
+}
+
+puts "unpacking file ", Time.now
 bytes = x.unpack("s*")
 
 puts "bucketing samples, ", Time.now
