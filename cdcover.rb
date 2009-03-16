@@ -5,10 +5,12 @@ require 'rmagick'
 size = 300
 
 offset = 0.05*size
-width = 0.9*size
-height = 0.4*size
-scale = 65536 / height
-midpoint = size - 1.1*height
+width = (0.9*size+0.5).to_i
+height = 0.25*size
+scale = 32768 / height
+midpoint = 1.2*height
+
+puts "size=#{size} offset=#{offset} width=#{width} height=#{height} scale=#{scale} midpoint=#{midpoint}"
 
 canvas = Magick::Image.new(size, size) { self.background_color = 'white' }
 gc = Magick::Draw.new
@@ -85,8 +87,8 @@ buckets.each_with_index { |b, i|
 gc.pointsize = 14
 gc.stroke('#888888')
 gc.fill('#888888')
-gc.text(0.1*size, midpoint + 0.6*height, tracknum)
-gc.text(0.1*size, midpoint + 0.7*height, trackname)
+gc.text(0.1*size, midpoint + 1.5*height, tracknum)
+gc.text(0.1*size, midpoint + 1.8*height, trackname)
 gc.draw(canvas)
 canvas.write("png/test.png")
 puts Time.now
