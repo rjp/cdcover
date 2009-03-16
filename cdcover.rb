@@ -70,7 +70,7 @@ puts "unpacking file ", Time.now
 bytes = x.unpack("s*")
 
 puts "bucketing samples, ", Time.now
-bucket_size = (((bytes.size-1).to_f / width)+0.5).to_i
+bucket_size = (((bytes.size-1).to_f / width)+0.5).to_i + 1
 p bytes.size
 #test = bytes[0..441000]
 #bytes = test
