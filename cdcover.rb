@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'rmagick'
+require 'RMagick'
 
 # graph parameters
 size = 600
