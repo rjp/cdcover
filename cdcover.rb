@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rmagick'
 
 # graph parameters
-size = 300
+size = 600
 
 offset = 0.05*size
 width = (0.9*size+0.5).to_i
@@ -51,13 +51,16 @@ class Bucket
     end
 end
 
-buckets = Array.new(300) { Bucket.new }
+buckets = Array.new(width) { Bucket.new }
 
 # read a 16 bit linear raw PCM file
 puts "reading file ", Time.now
 x = IO.read(file)
 puts "unpacking file ", Time.now
+
+# raw 16 bit linear PCM two channel
 bytes = x.unpack("i*")
+
 puts "bucketing samples, ", Time.now
 bucket_size = bytes.size / width
 p bytes.size
@@ -71,20 +74,23 @@ bytes.each_with_index { |i,j|
 #    if j % 44100 == 0 then puts "#{j/44100} b=#{bucket}"; end
     buckets[bucket].add(left)
 }
+p buckets[0..8]
 puts "plotting graph ", Time.now
 buckets.each_with_index { |b, i|
     gc.stroke('#000000')
     if b.count > 0 then
         avg_p, avg_n = b.avg
         # 5 -6.80763244628906 8.06854248046875 -0.825119018554687 0.821914672851562 / -4249 -515 513 5036 70724 -88632
-#        puts "#{i} #{b.min/scale} #{b.max/scale} #{avg_n/scale} #{avg_p/scale} / #{b.min} #{avg_n} #{avg_p} #{b.max} #{b.count} #{b.total}"
         low = (avg_n + b.min) / 2
         high = (avg_p + b.max) / 2
+        low = b.min
+        high = b.max
+#        puts "#{i} #{low/scale}-#{high/scale} / #{b.min/scale} #{b.max/scale} #{avg_n/scale} #{avg_p/scale} / #{b.min} #{avg_n} #{avg_p} #{b.max} #{b.count} #{b.total} #{low}-#{high}"
         gc.line(i+offset, midpoint+low/scale, i+offset, midpoint+high/scale)
     end
 }
 # now plot some suitably sized text
-gc.pointsize = 14
+gc.pointsize = 16
 gc.stroke('#888888')
 gc.fill('#888888')
 gc.text(0.1*size, midpoint + 1.5*height, tracknum)
