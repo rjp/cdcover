@@ -98,7 +98,7 @@ buckets.each_with_index { |b, i|
     end
 }
 # now plot some suitably sized text
-gc.pointsize = 16
+gc.pointsize = 36
 gc.stroke('#888888')
 gc.fill('#888888')
 gc.text(0.1*size, midpoint + 1.5*height, tracknum)
