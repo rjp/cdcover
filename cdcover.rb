@@ -104,9 +104,27 @@ gc.fill('#888888')
 
 metrics = gc.get_type_metrics(canvas, trackname)
 puts "width of [#{trackname}] is #{metrics.width}"
+single_height = metrics.height
+
+if metrics.width > width then # we have to break the text somewhere
+    extra = ""
+    loop do
+	    left, mid, right = trackname.rpartition(/\W/)
+	    metrics = gc.get_type_metrics(canvas, left)
+        puts "[#{trackname}] => [#{left}] [#{mid}] [#{right}] = #{metrics.width} / [#{extra}]"
+	    if metrics.width < width then
+	        trackname = left << "\n" << right << extra
+	        metrics = gc.get_multiline_type_metrics(canvas, trackname)
+	        break
+	    else
+            extra = mid << right << extra
+            trackname = left
+        end
+    end
+end
 
 gc.text(offset, midpoint + 1.5*height, tracknum)
-gc.text(offset, midpoint + 1.5*height + 1.1*metrics.height, trackname)
+gc.text(offset, midpoint + 1.5*height + 1.1*single_height, trackname)
 gc.draw(canvas)
 canvas.write("png/test.png")
 puts Time.now
