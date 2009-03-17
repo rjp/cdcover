@@ -5,7 +5,7 @@ require 'RMagick'
 size = 600
 
 offset = 0.05*size
-width = (0.9*size+0.5).to_i
+orig_width = (0.9*size+0.5).to_i
 height = 0.25*size
 scale = 32768 / height
 midpoint = 1.4*height
@@ -24,7 +24,7 @@ output = ARGV[3]
 max_samples = ARGV[4].to_i
 samples = ARGV[5].to_i
 
-width = width * samples / max_samples
+width = orig_width * samples / max_samples
 
 class Bucket
     attr_accessor :total, :count, :min, :max
@@ -145,8 +145,8 @@ def linebreak(t, gc, canvas, width, depth=0)
     return trackname
 end
 
-if metrics.width > width then # we have to break the text somewhere
-    trackname = linebreak(trackname, gc, canvas, width)
+if metrics.width > orig_width then # we have to break the text somewhere
+    trackname = linebreak(trackname, gc, canvas, orig_width)
 end
 
 gc.text(offset, midpoint + 1.5*height, tracknum)

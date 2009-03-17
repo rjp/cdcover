@@ -1,4 +1,8 @@
-mkdir -p png
+od=png
+if [ "$OUTDIR" ]; then
+    od="png/$OUTDIR"
+fi
+mkdir -p "$od"
 x=1
 
 max_samples=0
@@ -25,8 +29,12 @@ for i in "$@"; do
     ttl="${TIT2:-$k}"
 ### THIS IS HORRIBLE
 
+    if [ "$NO_SCALING" ]; then
+        max_samples=$samples
+    fi
+
     png=$(printf "%s.png" "$k")
-    ruby cdcover.rb "$i" "$trk" "$ttl" "png/$png" $max_samples $samples
+    ruby cdcover.rb "$i" "$trk" "$ttl" "$od/$png" $max_samples $samples
 
     x=$((x+1))
 done
