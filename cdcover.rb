@@ -20,6 +20,7 @@ max_vol = 65535
 file = ARGV[0]
 tracknum = ARGV[1]
 trackname = ARGV[2]
+output = ARGV[3]
 
 class Bucket
     attr_accessor :total, :count, :min, :max
@@ -136,5 +137,5 @@ end
 gc.text(offset, midpoint + 1.5*height, tracknum)
 gc.text(offset, midpoint + 1.5*height + 1.1*single_height, trackname)
 gc.draw(canvas)
-canvas.write("png/test.png")
+canvas.write(output)
 # puts Time.now

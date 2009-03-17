@@ -13,9 +13,8 @@ for i in "$@"; do
     ttl="${TIT2:-$k}"
 ### THIS IS HORRIBLE
 
-    ruby cdcover.rb "$i" "$trk" "$ttl"
-
     png=$(printf "%s.png" "$k")
-    mv png/test.png png/"$png"
+    ruby cdcover.rb "$i" "$trk" "$ttl" "png/$png"
+
     x=$((x+1))
 done
