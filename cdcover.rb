@@ -58,14 +58,21 @@ buckets = Array.new(width) { Bucket.new }
 # puts "reading file ", Time.now
 
 x=nil
+sox_command = [ 'sox', file, '-t', 'raw', '-r', '4000', '-c', '1', '-s', '-L', '-' ]
 # we have to fork/exec to get a clean commandline
 IO.popen('-') { |p|
     if p.nil? then
         # raw 16 bit linear PCM one channel
-        exec 'sox', file, '-t', 'raw', '-r', '4000', '-c', '1', '-s', '-'
+        $stderr.close
+        exec *sox_command
     end
     x = p.read
 }
+
+if x.size == 0 then
+    puts "sox returned no data, command was\n> #{sox_command.join(' ')}"
+    exit 1
+end
 
 # puts "unpacking file ", Time.now
 bytes = x.unpack("s*")
