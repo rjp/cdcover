@@ -21,6 +21,10 @@ file = ARGV[0]
 tracknum = ARGV[1]
 trackname = ARGV[2]
 output = ARGV[3]
+max_samples = ARGV[4].to_i
+samples = ARGV[5].to_i
+
+width = width * samples / max_samples
 
 class Bucket
     attr_accessor :total, :count, :min, :max
