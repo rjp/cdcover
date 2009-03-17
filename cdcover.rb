@@ -10,7 +10,7 @@ height = 0.25*size
 scale = 32768 / height
 midpoint = 1.4*height
 
-puts "size=#{size} offset=#{offset} width=#{width} height=#{height} scale=#{scale} midpoint=#{midpoint}"
+# puts "size=#{size} offset=#{offset} width=#{width} height=#{height} scale=#{scale} midpoint=#{midpoint}"
 
 canvas = Magick::Image.new(size, size) { self.background_color = 'white' }
 gc = Magick::Draw.new
@@ -54,7 +54,7 @@ end
 buckets = Array.new(width) { Bucket.new }
 
 # read a 16 bit linear raw PCM file
-puts "reading file ", Time.now
+# puts "reading file ", Time.now
 
 x=nil
 # we have to fork/exec to get a clean commandline
@@ -66,15 +66,15 @@ IO.popen('-') { |p|
     x = p.read
 }
 
-puts "unpacking file ", Time.now
+# puts "unpacking file ", Time.now
 bytes = x.unpack("s*")
 
-puts "bucketing samples, ", Time.now
+# puts "bucketing samples, ", Time.now
 bucket_size = (((bytes.size-1).to_f / width)+0.5).to_i + 1
-p bytes.size
+# p bytes.size
 #test = bytes[0..441000]
 #bytes = test
-puts "#{bucket_size} samples in each of #{width} buckets"
+# puts "#{bucket_size} samples in each of #{width} buckets"
 bytes.each_with_index { |i,j|
 #    left = i >> 16
 #    right = i & 0xFFFF
@@ -82,8 +82,8 @@ bytes.each_with_index { |i,j|
     bucket = j / bucket_size
     buckets[bucket].add(right)
 }
-p buckets[0..8]
-puts "plotting graph ", Time.now
+
+# puts "plotting graph ", Time.now
 buckets.each_with_index { |b, i|
     gc.stroke('#000000')
     if b.count > 0 then
@@ -103,11 +103,10 @@ gc.stroke('#888888')
 gc.fill('#888888')
 
 metrics = gc.get_type_metrics(canvas, trackname)
-puts "width of [#{trackname}] is #{metrics.width}"
+# puts "width of [#{trackname}] is #{metrics.width}"
 single_height = metrics.height
 
 def linebreak(t, gc, canvas, width, depth=0)
-    puts "= #{t}"
     trackname = t
     extra = ""
     loop do
@@ -138,4 +137,4 @@ gc.text(offset, midpoint + 1.5*height, tracknum)
 gc.text(offset, midpoint + 1.5*height + 1.1*single_height, trackname)
 gc.draw(canvas)
 canvas.write("png/test.png")
-puts Time.now
+# puts Time.now
