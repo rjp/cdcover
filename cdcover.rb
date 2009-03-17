@@ -92,18 +92,22 @@ bytes.each_with_index { |i,j|
 }
 
 # puts "plotting graph ", Time.now
-buckets.each_with_index { |b, i|
-    gc.stroke('#000000')
-    if b.count > 0 then
-        avg_p, avg_n = b.avg
-        # 5 -6.80763244628906 8.06854248046875 -0.825119018554687 0.821914672851562 / -4249 -515 513 5036 70724 -88632
-        low = (avg_n + b.min) / 2
-        high = (avg_p + b.max) / 2
-        low = b.min
-        high = b.max
-#        puts "#{i} #{low/scale}-#{high/scale} / #{b.min/scale} #{b.max/scale} #{avg_n/scale} #{avg_p/scale} / #{b.min} #{avg_n} #{avg_p} #{b.max} #{b.count} #{b.total} #{low}-#{high}"
-        gc.line(i+offset, midpoint+low/scale, i+offset, midpoint+high/scale)
-    end
+window = 5
+start = (window/2).to_i
+
+start.upto(buckets.size-(window-1)) { |i|
+    t_min = 0
+    t_max = 0
+
+    (-start..start).each { |o|
+        t_min = t_min + buckets[i+o].min
+        t_max = t_max + buckets[i+o].max
+    }
+
+    low = t_min / window
+    high = t_max / window
+
+    gc.line(i+offset, midpoint+low/scale, i+offset, midpoint+high/scale)
 }
 # now plot some suitably sized text
 gc.pointsize = 36
