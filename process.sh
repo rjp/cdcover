@@ -29,10 +29,15 @@ x=1
 
 max_samples=1
 
+track_length () {
+    # Samples read:          12582912
+    sox "$1" -n stat 2>&1 | sed -ne 's/^Samples read: *//p'
+}
+
 if [ ! $NO_SCALING ]; then
 	for i in "$@"; do
-	    samples=$(soxi -s "$i")
-	    echo "$i = $samples"
+	    samples=$(track_length "$i")
+# echo "$i = $samples"
 	    if [ $samples -gt $max_samples ]; then
 	        max_samples=$samples
 	    fi
@@ -46,7 +51,7 @@ for i in "$@"; do
     k="${j%.*}"
 
     if [ ! $NO_SCALING ]; then
-        samples=$(soxi -s "$i")
+        samples=$(track_length "$i")
     else
         samples=1
     fi
