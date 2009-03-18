@@ -1,7 +1,7 @@
 # TODO fold all this into the single ruby script?
 
 # option parsing cargo-culted from /usr/share/getopt/getopt-parse.bash
-TEMP=`getopt -o mo:sw: --long montage,outputdir:,scaling,window: \
+TEMP=`getopt -o fmo:sw: --long force,montage,outputdir:,scaling,window: \
      -n 'cdcover.process' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -18,6 +18,7 @@ while true ; do
         -s|--scaling)   unset NO_SCALING; shift;;
         -m|--montage)   MONTAGE=1; shift;;
         -w|--window)    MV_WINDOW=$2; shift 2;;
+        -f|--force)     FORCE_OUT=1; shift;;
         --) shift; break;;
         *) echo "Internal error with getopt"; exit 1;;
     esac
@@ -61,8 +62,14 @@ for i in "$@"; do
 
     png=$(printf "%s.png" "$k")
     echo ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $MV_WINDOW
-    ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $MV_WINDOW
-    echo $png >> "$tmpfile"
+    update_file=0
+    if [ $FORCE_OUT ]; then update_file=1; fi
+    if [ "$i" -nt "$OUTDIR/$png" ]; then update_file=1; fi
+
+    if [ $update_file -gt 0 ]; then
+        ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $MV_WINDOW
+    fi
+    echo "$OUTDIR/$png" >> "$tmpfile"
 
     x=$((x+1))
 done
