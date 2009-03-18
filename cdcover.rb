@@ -23,6 +23,7 @@ trackname = ARGV[2]
 output = ARGV[3]
 max_samples = ARGV[4].to_i
 samples = ARGV[5].to_i
+window = (ARGV[6].to_i || 5)
 
 width = orig_width * samples / max_samples
 
@@ -96,17 +97,21 @@ bytes.each_with_index { |i,j|
 }
 
 # puts "plotting graph ", Time.now
-window = 5
 start = (window/2).to_i
 
 start.upto(buckets.size-(window-1)) { |i|
     t_min = 0
     t_max = 0
 
-    (-start..start).each { |o|
-        t_min = t_min + buckets[i+o].min
-        t_max = t_max + buckets[i+o].max
-    }
+    if window == 1 then
+        t_min = buckets[i].min
+        t_max = buckets[i].max
+    else
+	    (-start..start).each { |o|
+	        t_min = t_min + buckets[i+o].min
+	        t_max = t_max + buckets[i+o].max
+	    }
+    end
 
     low = t_min / window
     high = t_max / window
