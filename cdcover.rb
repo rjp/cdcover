@@ -98,8 +98,9 @@ bytes.each_with_index { |i,j|
 
 # puts "plotting graph ", Time.now
 start = (window/2).to_i
+b_end = buckets.size-1-(window-1)
 
-start.upto(buckets.size-(window-1)) { |i|
+start.upto(b_end) { |i|
     t_min = 0
     t_max = 0
 
