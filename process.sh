@@ -65,8 +65,12 @@ for i in "$@"; do
     ttl="${TIT2:-$k}"
 ### THIS IS HORRIBLE
 
-    png=$(printf "%s.png" "$k")
-    echo ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $MV_WINDOW
+### THIS IS ALSO HORRIBLE
+# force all the output filenames to have no spaces because montage is dumb
+    t_png=$(printf "%s.png" "$k")
+    png="${t_png// /_}"
+
+# echo ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $MV_WINDOW
     update_file=0
     if [ $FORCE_OUT ]; then update_file=1; fi
     if [ "$i" -nt "$OUTDIR/$png" ]; then update_file=1; fi
