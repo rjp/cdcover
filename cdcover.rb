@@ -100,6 +100,10 @@ bytes.each_with_index { |i,j|
 start = (window/2).to_i
 b_end = buckets.size-1-(window-1)
 
+p_min = 0
+p_max = 0
+p_i   = start
+
 start.upto(b_end) { |i|
     t_min = 0
     t_max = 0
@@ -117,10 +121,18 @@ start.upto(b_end) { |i|
     low = t_min / window
     high = t_max / window
 
-    gc.line(i+offset, midpoint+low/scale, i+offset, midpoint+high/scale)
+    gc.stroke('#000000')
+    gc.stroke_width(2)
+    gc.line(p_i+offset, midpoint+p_min/scale, i+offset, midpoint+low/scale)
+    gc.line(p_i+offset, midpoint+p_max/scale, i+offset, midpoint+high/scale)
+
+    p_i = i
+    p_min = low
+    p_max = high
 }
 # now plot some suitably sized text
 gc.pointsize = 36
+gc.stroke_width(1)
 gc.stroke('#888888')
 gc.fill('#888888')
 
