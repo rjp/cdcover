@@ -1,7 +1,7 @@
 # TODO fold all this into the single ruby script?
 
 # option parsing cargo-culted from /usr/share/getopt/getopt-parse.bash
-TEMP=`getopt -o fmo:sw: --long force,montage,outputdir:,scaling,window: \
+TEMP=`getopt -o efmo:sw:x --long outline,force,montage,outputdir:,scaling,window:,spikey \
      -n 'cdcover.process' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -11,6 +11,7 @@ eval set -- "$TEMP"
 
 OUTDIR="png"
 NO_SCALING=1
+GRAPH_TYPE="normal"
 
 while true ; do
 	case "$1" in
@@ -19,6 +20,8 @@ while true ; do
         -m|--montage)   MONTAGE=1; shift;;
         -w|--window)    MV_WINDOW=$2; shift 2;;
         -f|--force)     FORCE_OUT=1; shift;;
+        -x|--spikey)    GRAPH_TYPE='spikey'; shift;;
+        -e|--outline)   GRAPH_TYPE='outline'; shift;;
         --) shift; break;;
         *) echo "Internal error with getopt"; exit 1;;
     esac
@@ -76,7 +79,7 @@ for i in "$@"; do
     if [ "$i" -nt "$OUTDIR/$png" ]; then update_file=1; fi
 
     if [ $update_file -gt 0 ]; then
-        ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $MV_WINDOW
+        ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $GRAPH_TYPE $MV_WINDOW
     fi
     echo "$OUTDIR/$png" >> "$tmpfile"
 

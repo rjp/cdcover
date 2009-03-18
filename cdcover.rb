@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'RMagick'
 
-graph_type = 'window'
 
 # graph parameters
 size = 600
@@ -25,7 +24,8 @@ trackname = ARGV[2]
 output = ARGV[3]
 max_samples = ARGV[4].to_i
 samples = ARGV[5].to_i
-window = (ARGV[6].to_i || 5)
+graph_type = ARGV[6] || 'normal'
+window = (ARGV[7].to_i || 5)
 
 width = orig_width * samples / max_samples
 
@@ -126,14 +126,20 @@ start.upto(b_end) { |i|
     low = t_min / window
     high = t_max / window
 
-    if graph_type == 'window' then
+    if graph_type == 'outline' or graph_type == 'spikey' then
 	    gc.stroke('#000000')
 	    gc.stroke_width(2)
 	    gc.line(p_i+offset, midpoint+p_min/scale, i+offset, midpoint+low/scale)
 	    gc.line(p_i+offset, midpoint+p_max/scale, i+offset, midpoint+high/scale)
     end
 
-    if graph_subtype == 'spikey' then
+    if graph_type == 'normal' then
+	    gc.stroke('#000000')
+	    gc.stroke_width(1)
+	    gc.line(i+offset, midpoint+low/scale, i+offset, midpoint+high/scale)
+    end
+
+    if graph_type == 'spikey' then
 	    gc.stroke('#000000')
 	    gc.stroke_width(1)
 	    if i_min < low then
@@ -148,6 +154,7 @@ start.upto(b_end) { |i|
     p_min = low
     p_max = high
 }
+
 # now plot some suitably sized text
 gc.pointsize = 36
 gc.stroke_width(1)
