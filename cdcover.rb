@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'RMagick'
 
+graph_type = 'window'
+
 # graph parameters
 size = 600
 
@@ -108,9 +110,12 @@ start.upto(b_end) { |i|
     t_min = 0
     t_max = 0
 
+    i_min = buckets[i].min
+    i_max = buckets[i].max
+
     if window == 1 then
-        t_min = buckets[i].min
-        t_max = buckets[i].max
+        t_min = i_min
+        t_max = i_max
     else
 	    (-start..start).each { |o|
 	        t_min = t_min + buckets[i+o].min
@@ -121,10 +126,23 @@ start.upto(b_end) { |i|
     low = t_min / window
     high = t_max / window
 
-    gc.stroke('#000000')
-    gc.stroke_width(2)
-    gc.line(p_i+offset, midpoint+p_min/scale, i+offset, midpoint+low/scale)
-    gc.line(p_i+offset, midpoint+p_max/scale, i+offset, midpoint+high/scale)
+    if graph_type == 'window' then
+	    gc.stroke('#000000')
+	    gc.stroke_width(2)
+	    gc.line(p_i+offset, midpoint+p_min/scale, i+offset, midpoint+low/scale)
+	    gc.line(p_i+offset, midpoint+p_max/scale, i+offset, midpoint+high/scale)
+    end
+
+    if graph_subtype == 'spikey' then
+	    gc.stroke('#000000')
+	    gc.stroke_width(1)
+	    if i_min < low then
+	        gc.line(i+offset, midpoint+i_min/scale, i+offset, midpoint+low/scale)
+	    end
+	    if i_max > high then
+	        gc.line(i+offset, midpoint+i_max/scale, i+offset, midpoint+high/scale)
+	    end
+    end
 
     p_i = i
     p_min = low
