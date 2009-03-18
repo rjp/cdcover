@@ -61,8 +61,8 @@ for i in "$@"; do
 
     # magically extract track information to set the title
     a=$(mp3info -p "%-8n%t" "$i")
-    trk=${a:0:8}
-    ttl=${a:8}
+    trk=${a:0:8}; trk="${trk:-$x}"
+    ttl=${a:8}; ttl="${ttl:-$k}"
 
 ### THIS IS ALSO HORRIBLE
 # force all the output filenames to have no spaces because montage is dumb
