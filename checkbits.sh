@@ -17,10 +17,10 @@ if [ $? -ne 0 ]; then
     fi
 fi
 
-# check for id3info
-id3info /dev/null >/dev/null 2>/dev/null
+# check for mp3info
+mp3info /dev/null >/dev/null 2>/dev/null
 if [ $? -ne 0 ]; then
-    echo "id3info not found"
+    echo "mp3info not found"
     exit 3
 fi
 
