@@ -128,7 +128,7 @@ start.upto(b_end) { |i|
 
     if graph_type == 'outline' or graph_type == 'spikey' then
 	    gc.stroke('#000000')
-	    gc.stroke_width(2)
+        gc.stroke_width(1)
 	    gc.line(p_i+offset, midpoint+p_min/scale, i+offset, midpoint+low/scale)
 	    gc.line(p_i+offset, midpoint+p_max/scale, i+offset, midpoint+high/scale)
     end
