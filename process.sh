@@ -1,7 +1,7 @@
 # TODO fold all this into the single ruby script?
 
 # option parsing cargo-culted from /usr/share/getopt/getopt-parse.bash
-TEMP=`getopt -o efmo:sw:x --long outline,force,montage,outputdir:,scaling,window:,spikey \
+TEMP=`getopt -o efmo:sw:x --long outline,force,montage,outputdir:,scaling,window:,spiky \
      -n 'cdcover.process' -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -20,7 +20,7 @@ while true ; do
         -m|--montage)   MONTAGE=1; shift;;
         -w|--window)    MV_WINDOW=$2; shift 2;;
         -f|--force)     FORCE_OUT=1; shift;;
-        -x|--spikey)    GRAPH_TYPE='spikey'; shift;;
+        -x|--spiky)    GRAPH_TYPE='spikey'; shift;;
         -e|--outline)   GRAPH_TYPE='outline'; shift;;
         --) shift; break;;
         *) echo "Internal error with getopt"; exit 1;;
@@ -64,7 +64,7 @@ for i in "$@"; do
     trk=${a:0:8}; trk="${trk:-$x}"
     ttl=${a:8}; ttl="${ttl:-$k}"
 
-### THIS IS ALSO HORRIBLE
+### THIS IS HORRIBLE
 # force all the output filenames to have no spaces because montage is dumb
     t_png=$(printf "%s.png" "$k")
     png="${t_png// /_}"
