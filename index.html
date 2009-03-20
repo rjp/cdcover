@@ -1,3 +1,7 @@
+---
+myprefix: "http://backup.frottage.org/rjp/tmp/20090318/png/esqI"
+prefix: "http://backup.frottage.org/rjp/tmp/20090318/png"
+---
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
@@ -22,7 +26,7 @@
 		h1 .small { font-size: 0.4em; }
 		h1 a { text-decoration: none }
 		h2 { font-size: 1.5em; color: #000000; }
-    h3 { text-align: center; color: #000000; }
+    h3 { color: #000000; }
     a { color: #000000; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
@@ -52,23 +56,56 @@
       CD Covers from audio waveforms
     </div>
 
-    <p>Wholly inspired by Joshua Distler's <a href="http://www.joshuadistler.com/index.php?rp=0&p=97&f=&i=0&neg=0&w=1">"Music CD Labeling System"</a></p>
+    <p>Wholly inspired by Joshua Distler's <a href="http://www.joshuadistler.com/index.php?rp=0&p=97&f=&i=0&neg=0&w=1">"Music CD Labeling System"</a> with prompting from <a href="http://husk.org">Mr P.Mison</a></p>
 
     <h2>Sample output</h2>
     <p>
-   <a href="http://backup.frottage.org/rjp/tmp/20090316/png/esquivel.jpg"><img width="200" height="200" src="http://backup.frottage.org/rjp/tmp/20090316/png/sm-esquivel.jpg" alt="Esquivel CD Cover"></a>
-   <a href="http://backup.frottage.org/rjp/tmp/20090316/png/cdcover.jpg"><img width="200" height="200" src="http://backup.frottage.org/rjp/tmp/20090316/png/sm-cdcover.jpg" alt="White Rock CD Cover"></a>
-    
+   <a title="-w 5" href="{{ page.myprefix }}/w5_normal.png"><img width="200" height="200" src="{{ page.myprefix }}/sm-w5_normal.png" alt="Esquivel CD Cover"></a>
+   <a title="-w 5 -e" href="{{ page.myprefix }}/w5_outline.png"><img width="200" height="200" src="{{ page.myprefix }}/sm-w5_outline.png" alt="Esquivel CD Cover"></a>
+   <a title="-w 5 -x" href="{{ page.myprefix }}/w5_spikey.png"><img width="200" height="200" src="{{ page.myprefix }}/sm-w5_spikey.png" alt="Esquivel CD Cover"></a>
     </p>
-    
+
+    <p>
+   <a title="-w 5 -e -s -m" href="{{ page.prefix }}/esqG/montage.png"><img width="200" height="200" src="{{ page.prefix }}/esqG/sm-montage.png" alt="Esquivel CD Cover"></a>
+   <a title="-w 5 -x -m" href="{{ page.prefix }}/esqB/montage.png"><img width="200" height="200" src="{{ page.prefix }}/esqB/sm-montage.png" alt="Esquivel CD Cover"></a>
+   <a title="-w 5 -s -m" href="{{ page.prefix }}/esqE/montage.png"><img width="200" height="200" src="{{ page.prefix }}/esqE/sm-montage.png" alt="Esquivel CD Cover"></a>
+   </p>
+   
+<h2>How to run it</h2>
+<tt>
+./process.sh [flags] [list of audio files]
+</tt>
+
+<h2>Options</h2>
+<dl>
+<dt>-o /path/to/output <dt>--outputdir /path/to/output<dd>Output directory
+<dt>-s <dt>--scaling <dd>Scale to the longest
+<dt>-w N <dt>--window N<dd>Moving average over N pixels
+<dt>-m <dt>--montage <dd>Make a 4x4 montage of 150x150 versions
+<dt>-e <dt>--outline <dd>Outline output
+<dt>-x <dt>--spikey <dd>Spikey output
+<dt>-f <dt>--force <dd>Force update of the png
+</dl>
+<h3>Example</h3>
+<p>
+To convert a bunch of mp3s into ./png/esquivel/*.png output files...
+<p>
+<tt>
+./process.sh -e -s -f -w 5 -m -o png/esquivel esquivel/*.mp3
+</tt>
+
 <h2>Dependencies</h2>
-<p>sox, id3lib, ruby, rmagick</p>
+<p>sox, mp3info, ruby, rmagick</p>
+<p>
+Tested with sox v14.0.0, MP3Info 0.8.4, ruby 1.8.6 (2007-09-24 patchlevel 111), RMagick 2.9.1.
+<p>
+It does somewhat assume you've installed RMagick using rubygems and will probably break if you don't have rubygems anywhere.  Easily rectified by deleting the first line of cdcover.rb.
 <h2>License</h2>
 <p>GPL</p>
 <h2>Authors</h2>
 <p>rjp (zimpenfish@gmail.com)<br/><br/>      </p>
 <h2>Contact</h2>
-<p> (zimpenfish@gmail.com)<br/>      </p>
+<p>rjp (zimpenfish@gmail.com)<br/>      </p>
 
 
     <h2>Download</h2>
