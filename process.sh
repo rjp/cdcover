@@ -12,6 +12,7 @@ eval set -- "$TEMP"
 OUTDIR="png"
 NO_SCALING=1
 GRAPH_TYPE="normal"
+MV_WINDOW=5
 
 while true ; do
 	case "$1" in

@@ -25,7 +25,9 @@ output = ARGV[3]
 max_samples = ARGV[4].to_i
 samples = ARGV[5].to_i
 graph_type = ARGV[6] || 'normal'
-window = (ARGV[7].to_i || 5)
+window = ARGV[7].to_i
+
+puts "window is #{window}"
 
 width = orig_width * samples / max_samples
 
