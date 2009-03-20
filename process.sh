@@ -65,6 +65,12 @@ for i in "$@"; do
     trk=${a:0:8}; trk="${trk:-$x}"
     ttl=${a:8}; ttl="${ttl:-$k}"
 
+    if [ "$DEBUG_CDCOVER" ]; then
+        echo "[$a]"
+        echo "[$trk]"
+        echo "[$ttl]"
+    fi
+
 ### THIS IS HORRIBLE
 # force all the output filenames to have no spaces because montage is dumb
     t_png=$(printf "%s.png" "$k")
@@ -76,6 +82,9 @@ for i in "$@"; do
     if [ "$i" -nt "$OUTDIR/$png" ]; then update_file=1; fi
 
     if [ $update_file -gt 0 ]; then
+        if [ "$DEBUG_CDCOVER" ]; then
+            echo ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $GRAPH_TYPE $MV_WINDOW
+        fi
         ruby cdcover.rb "$i" "$trk" "$ttl" "$OUTDIR/$png" $max_samples $samples $GRAPH_TYPE $MV_WINDOW
     fi
     echo "$OUTDIR/$png" >> "$tmpfile"
