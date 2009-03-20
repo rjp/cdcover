@@ -60,13 +60,9 @@ for i in "$@"; do
     fi
 
     # magically extract track information to set the title
-
-### THIS IS HORRIBLE
-    eval $(id3info "$i" | egrep 'TRCK|TIT2' | sed -e 's/^=== //' -e 's/"/\\"/g' -e 's/ ([^)]*): /="/' -e 's/$/"/')  
-    t=${TRCK:-$x}
-    trk=${t%/*}
-    ttl="${TIT2:-$k}"
-### THIS IS HORRIBLE
+    a=$(mp3info -p "%-8n%t" "$i")
+    trk=${a:0:8}; trk="${trk:-$x}"
+    ttl=${a:8}; ttl="${ttl:-$k}"
 
 ### THIS IS ALSO HORRIBLE
 # force all the output filenames to have no spaces because montage is dumb
