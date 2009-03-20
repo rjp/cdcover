@@ -61,9 +61,9 @@ for i in "$@"; do
     fi
 
     # magically extract track information to set the title
-    a=$(mp3info -p "%-8n%t" "$i")
-    trk=${a:0:8}; trk="${trk:-$x}"
-    ttl=${a:8}; ttl="${ttl:-$k}"
+    a=$(mp3info -p '%n/%t' "$i")
+    trk=${a%/*};
+    ttl=${a#*/}; ttl="${ttl:-$k}"
 
     if [ "$DEBUG_CDCOVER" ]; then
         echo "[$a]"
