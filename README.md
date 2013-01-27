@@ -21,6 +21,4 @@ Wholly inspired by [Joshua Distler](http://www.joshuadistler.com/index.php?rp=0&
 
 ## Example output
 
-For the album ["Esquivel! Merry Xmas From the Space-Age Bachelor Pad" by Esquivel](http://www.amazon.com/Esquivel-Merry-Xmas-Space-Age-Bachelor/dp/B0000048EZ) (albeit with the tracks in semi-random order):
-
-![Esquivel output](http://rjp.pi.st/tmp/20090318/shelledmusic.png)
+!["Post", by Bjork](http://rjp.pi.st/tmp/20090317/bjork.jpg)
